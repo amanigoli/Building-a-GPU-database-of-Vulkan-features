@@ -1,0 +1,130 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>GPU Application</title>
+</head>
+<body>
+
+<p align="center">
+    <br/>
+    {% if user %}
+        <a href="/">Home</a>
+        <br/>
+        <br/>
+        {% if gpu %}
+        <form action="/edit" method="post">
+            <table style="text-align:center;margin-left:auto; margin-right:auto; width: auto" border="1" cellpadding="5" cellspacing="5" bgcolor="#f5f5f5">
+                <tr bgcolor="#b5e7a0">
+                    <th colspan="3">
+                        EDIT DETAILS
+                    </th>
+                </tr>
+                <tr bgcolor="#b0c4de">
+                    <td>
+                        Name
+                    </td>
+                    <td>
+                        Manufacturer
+                    </td>
+                    <td>
+                        Date Issued
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="name" value="{{ gpu.name }}" readonly/>
+                    </td>
+                    <td>
+                        <input type="text" name="mfg" value="{{ gpu.manufacturer }}" />
+                    </td>
+                    <td>
+                        <input type="date" name="date" id="date"/>
+                        <script>
+                            document.getElementById('date').value = new Date("{{ gpu.dateIssued }}").toISOString().substring(0, 10);
+                        </script>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <table style="text-align:center;margin-left:auto; margin-right:auto; width: auto;" border="1" cellpadding="5"
+                   cellspacing="5" bgcolor="#f5f5f5">
+
+                <tr bgcolor="#b5e7a0">
+                    <th colspan="6">
+                        EDIT PROPERTIES
+                    </th>
+                </tr>
+                <tr bgcolor="#b0c4de">
+                    <td>
+                        Geometry Shader
+                    </td>
+                    <td>
+                        <input type="checkbox" name="geo-sh" {% if gpu.geometryShader %} checked {% endif %} />
+                    </td>
+                  </tr>
+                  <tr bgcolor="#b0c4de">
+                    <td>
+                        Tesselation Shader
+                    </td>
+
+                      <td>
+                          <input type="checkbox" name="tsl-sh" {% if gpu.tesselationShader %} checked {% endif %} />
+                      </td>
+                    </tr>
+                    <tr bgcolor="#b0c4de">
+                    <td>
+                        Shader Int16
+                    </td>
+                    <td>
+                        <input type="checkbox" name="sh-16" {% if gpu.ShaderInt16 %} checked {% endif %} />
+                    </td>
+                  </tr>
+                  <tr bgcolor="#b0c4de">
+                    <td>
+                        Sparse Binding
+                    </td>
+                    <td>
+                        <input type="checkbox" name="sp-bind" {% if gpu.SparseBinding %} checked {% endif %} />
+                    </td>
+                  </tr>
+                  <tr bgcolor="#b0c4de">
+                    <td>
+                        Texture Compression ETC2
+                    </td>
+                    <td>
+                        <input type="checkbox" name="tc-etc-2" {% if gpu.textureCompressionETC2 %} checked {% endif %} />
+                    </td>
+                  </tr>
+                  <tr bgcolor="#b0c4de">
+                    <td>
+                        Vertex Pipeline Stores And Atomics
+                    </td>
+
+                      <td>
+                          <input type="checkbox" name="vpsa" {% if gpu.vertexPipelineStoresAndAtomics %} checked {% endif %} />
+                      </td>
+                </tr>
+
+            </table>
+            <br/>
+            <table style="text-align:center;margin-left:auto; margin-right:auto;">
+                <tr>
+                    <td>
+                        <input type="submit" value="Update"/>
+                    </td>
+                    <td>
+                        <a href="/show?name={{ gpu.name }}"><input type="button" value="Cancel"/></a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        {% else %}
+        {% endif %}
+    {% else %}
+    <script>
+        window.location.href = "/";
+    </script>
+    {% endif %}
+</p>
+</body>
+</html>

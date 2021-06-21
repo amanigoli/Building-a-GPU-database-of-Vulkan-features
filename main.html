@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GPU Application</title>
+</head>
+<body>
+
+
+<p align="center">Welcome to GPU Application
+    <br>
+    {%if user %}
+    Logged in as {{ user.email() }} &emsp;
+    {% endif %}
+    <a href="{{ url}}">{{ url_string }}</a>
+</p>
+<hr>
+<br>
+
+{% if user %}
+<form action="/" method="post">
+    <input type="hidden" name="action" value="add-gpu">
+    <table style= "text-align:center;margin-left:auto;margin-right:auto;width:auto" border="1" cellpadding="5" cellspacing="5">
+
+        <tr bgcolor="#f0e68c">
+            <th colspan="3">NEW GPU</th>
+        </tr>
+        <tr bgcolor="#b0c4de">
+            <td>Name</td>
+            <td>Manufacturer</td>
+            <td>DateIssued</td>
+
+        </tr>
+
+        <tr>
+            <td>
+                <input type="text" name="name" required="required" value="a"/>
+            </td>
+            <td>
+                <input type="text" name="manufacturer" required="required" value="b"/>
+            </td>
+            <td>
+                <input type="date" name="date" required="required" id="date"/>
+                <script>
+                    document.getElementById('date').value = new Date().toISOString().substring(0,10);
+                </script>
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <table style="text-align:center; margin-left:auto; margin-right:auto; width:auto;" border="1" cellpadding="5"
+           cellspacing="5" bgcolor="#f5f5f5">
+
+        <tr bgcolor="#f0e68c">
+            <th colspan="6">
+                PROPERTIES
+            </th>
+        </tr>
+
+        <tr bgcolor="#b0c4de">
+            <td>Geometry Shader</td>
+            <td>
+                <input type="checkbox" name="geo-sh"/>
+            </td>
+        <tr bgcolor="#b0c4de">
+            <td>
+                Tesselation Shader
+            </td>
+            <td>
+                <input type="checkbox" name="tsh-sh"/>
+            </td>
+        </tr>
+        <tr bgcolor="#b0c4de">
+            <td>
+                Shader Int16
+            </td>
+            <td>
+                <input type="checkbox" name="sh-16"/>
+            </td>
+        </tr>
+        <tr bgcolor="#b0c4de">
+            <td>
+                Sparse Binding
+            </td>
+            <td>
+                <input type="checkbox" name="sp-bind"/>
+            </td>
+        </tr>
+        <tr bgcolor="#b0c4de">
+            <td>
+                Texture Compression ETC2
+            </td>
+            <td>
+                <input type="checkbox" name="tc-etc2"/>
+            </td>
+        </tr>
+        <tr bgcolor="#b0c4de">
+            <td>
+                Vertex Pipeline Stores And Atomics
+            </td>
+            <td>
+                <input type="checkbox" name="vpsa"/>
+            </td>
+
+        </tr>
+
+    </table>
+    <br>
+
+    <table style="text-align:center;margin-left:auto;margin-right:auto;">
+        <tr>
+            <td>
+                <input type="submit" value="Add"/>
+            </td>
+            <td>
+                <input type="reset" value="Reset"/>
+            </td>
+        </tr>
+    </table>
+</form>
+<br>
+<hr>
+<br>
+
+<form id="compare" action="/compare" method="post">
+    <table style="text-align:center;margin-left:auto; margin-right:auto; width: 50%;" border="1" cellpadding="5"
+           cellspacing="5" bgcolor="#f5f5f5">
+        <tr bgcolor="#f0e68c">
+            <th>
+                <!--Compare-->
+            </th>
+            <th>
+                GPU LIST
+            </th>
+        </tr>
+        {% for item in gpu_list %}
+        <tr>
+            <td><input class="compare" type="checkbox" name="{{ item.name }}" onclick="compare()"></td>
+            <td><a href="/show?name={{ item.name }}">{{ item.name }}</a></td>
+        </tr>
+        {% endfor %}
+
+    </table>
+</form>
+
+<br/>
+
+<form action="/" method="get">
+    <input type="hidden" name="action" value="filter-gpu">
+    <table style="text-align:center;margin-left:auto; margin-right:auto; width: auto;" border="1" cellpadding="5"
+           cellspacing="5" bgcolor="#f5f5f5">
+        <tr bgcolor="#f0e68c">
+            <th colspan="6">
+                FILTER BY PROPERTIES
+            </th>
+        </tr>
+        <tr bgcolor="#b0c4de">
+            <td>
+                Geometry Shader
+            </td>
+            <td>
+                <input type="checkbox" {% if geo_sh %} checked {% endif %} name="geo-sh"/>
+            </td>
+          </tr>
+          <tr bgcolor="#b0c4de">
+            <td>
+                Tesselation Shader
+            </td>
+            <td>
+                <input type="checkbox" {% if tsl_sh %} checked {% endif %} name="tsl-sh"/>
+            </td>
+          </tr>
+          <tr bgcolor="#b0c4de">
+            <td>
+                Shader Int16
+            </td>
+            <td>
+              <input type="checkbox" {% if sh_16 %} checked {% endif %} name="sh-16"/>
+          </td>
+        <tr bgcolor="#b0c4de">
+            <td>
+                Sparse Binding
+            </td>
+            <td>
+                <input type="checkbox" {% if sp_bind %} checked {% endif %} name="sp-bind"/>
+            </td>
+          </tr>
+          <tr bgcolor="#b0c4de">
+            <td>
+                Texture Compression ETC2
+            </td>
+            <td>
+                <input type="checkbox" {% if tc_etc_2 %} checked {% endif %} name="tc-etc-2"/>
+            </td>
+          </tr>
+          <tr bgcolor="#b0c4de">
+            <td>
+                Vertex Pipeline Stores And Atomics
+            </td>
+            <td>
+                <input type="checkbox" {% if vpsa %} checked {% endif %} name="vpsa"/>
+            </td>
+        </tr>
+
+    </table>
+    <br/>
+    <table style="text-align:center;margin-left:auto; margin-right:auto;">
+        <tr>
+            <td>
+                <input type="submit" value="Filter"/>
+            </td>
+            <td>
+                <a href="/"><input type="button" value="Show All"/></a>
+            </td>
+        </tr>
+    </table>
+</form>
+{% endif %}
+<script type="text/javascript">
+    function compare() {
+        var checkboxgroup = document.getElementById('compare').getElementsByTagName("input");
+        var limit = 1;
+        for (var i = 0; i < checkboxgroup.length; i++) {
+            checkboxgroup[i].onclick = function () {
+                var checkedcount = 0;
+                for (var i = 0; i < checkboxgroup.length; i++) {
+                    checkedcount += (checkboxgroup[i].checked) ? 1 : 0;
+                }
+                if (checkedcount >= 2) {
+                    document.getElementById("compare").submit();
+                }
+            }
+        }
+    }
+</script>
+
+
+</body>
+</html>

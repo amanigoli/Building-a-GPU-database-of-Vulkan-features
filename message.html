@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Message</title>
+</head>
+<body>
+<p align="center">
+    <br/>
+    {% if message %}
+    <script>
+        alert("{{ message }}");
+        window.location.href = "{{ redirect }}";
+    </script>
+    {% else %}
+    <script>
+        window.location.href = "/";
+    </script>
+    {% endif %}
+    <a href="{{ url }}">{{ url_string }}</a>
+
+</p>
+</body>
+</html>
